@@ -1,10 +1,11 @@
-#include "scintilla.bi"
-#include "scilexer.bi"
+'https://www.scintilla.org/
+#include "Scintilla.bi"
+#include "Scilexer.bi"
 
-#ifdef __FB_WIN32__
-	DyLibLoad("Scintilla32.dll")
-#else
+#ifdef __FB_64BIT__
 	DyLibLoad("Scintilla64.dll")
+#else
+	DyLibLoad("Scintilla32.dll")
 #endif
 
 '#Region "Form"
@@ -56,10 +57,10 @@
 		
 		Dim As MainMenu MainMenu1
 		Dim As MenuItem mnuFile, mnuFileNew, mnuFileOpen, mnuFileSave, mnuFileSaveAs, mnuFileBar1, mnuFileBar2, mnuFileSaveAll, mnuFileBar3, mnuFileProperties, mnuFilePrintSetup, mnuFilePrintPreview, mnuFilePrint, mnuFileBar4, mnuFileExit
-		Dim As MenuItem mnuEdit, mnuEditUndo, mnuRedo, mnuEditCopy, mnuEditCut, mnuEditPaste, mnuEditBar1, mnuEditDelete, mnuEditBar2, mnuEditSelectAll
-		Dim As MenuItem mnuView, mnuViewToolbar, mnuViewStatusBar, mnuViewBar1, mnuViewRefresh
+		Dim As MenuItem mnuEdit, mnuEditUndo, mnuEditRedo, mnuEditCopy, mnuEditCut, mnuEditPaste, mnuEditBar1, mnuEditDelete, mnuEditBar2, mnuEditSelectAll
+		Dim As MenuItem mnuView, mnuViewToolbar, mnuViewStatusBar, mnuViewBar1, mnuViewDarkMode, mnuViewBar2, mnuViewWhitespace, mnuViewEOL, mnuViewLN, mnuViewCaretLine, mnuViewFold
 		Dim As MenuItem mnuHelp, mnuHelpAbout
-		Dim As MenuItem mnuWindow, mnuWindowCascade, mnuWindowTileHorizontal, mnuWindowTileVertical, mnuWindowArrangeIcons, mnuWindowClose, mnuWindowCloseAll, MenuItem3, mnuViewDarkMode
+		Dim As MenuItem mnuWindow, mnuWindowCascade, mnuWindowTileHorizontal, mnuWindowTileVertical, mnuWindowArrangeIcons, mnuWindowClose, mnuWindowCloseAll, mnuWindowBar1
 		Dim As ImageList ImageList1
 		Dim As StatusBar StatusBar1
 		Dim As ToolBar ToolBar1
@@ -80,7 +81,11 @@
 				This.Icon.LoadFromResourceID(1)
 			#endif
 			'.WindowState = WindowStates.wsMaximized
-			.Caption = "MDI Scintilla"
+			#ifdef __FB_64BIT__
+				.Caption = "VFBE MDI Scintilla64"
+			#else
+				.Caption = "VFBE MDI Scintilla32"
+			#endif
 			.StartPosition = FormStartPosition.CenterScreen
 			.SetBounds 0, 0, 350, 319
 		End With
@@ -238,11 +243,11 @@
 			.Caption = "&Edit"
 			.Parent = @MainMenu1
 		End With
-		' mnuRedo
-		With mnuRedo
-			.Name = "mnuRedo"
+		' mnuEditRedo
+		With mnuEditRedo
+			.Name = "mnuEditRedo"
 			.Designer = @This
-			.Caption = "&Redo"
+			.Caption = !"&Redo\tShift+Ctrl+Z"
 			.OnClick = @_mnuEdit_Click
 			.Parent = @mnuEdit
 		End With
@@ -306,7 +311,7 @@
 		With mnuEditSelectAll
 			.Name = "mnuEditSelectAll"
 			.Designer = @This
-			.Caption = "Select &All"
+			.Caption = !"Select &All\tCtrl+A"
 			.OnClick = @_mnuEdit_Click
 			.Parent = @mnuEdit
 		End With
@@ -317,6 +322,7 @@
 			.Caption = "&View"
 			.Parent = @MainMenu1
 		End With
+		' mnuViewToolbar
 		With mnuViewToolbar
 			.Name = "mnuViewToolbar"
 			.Caption = "&Toolbar"
@@ -325,6 +331,7 @@
 			.Checked = True
 			.Parent = @mnuView
 		End With
+		' mnuViewStatusBar
 		With mnuViewStatusBar
 			.Name = "mnuViewStatusBar"
 			.Caption = "Status &Bar"
@@ -333,6 +340,7 @@
 			.Checked = True
 			.Parent = @mnuView
 		End With
+		' mnuViewBar1
 		With mnuViewBar1
 			.Name = "mnuViewBar1"
 			.Caption = "-"
@@ -348,7 +356,55 @@
 			.OnClick = @_mnuView_Click
 			.Parent = @mnuView
 		End With
-		
+		' mnuViewBar2
+		With mnuViewBar2
+			.Name = "mnuViewBar2"
+			.Designer = @This
+			.Caption = "-"
+			.Parent = @mnuView
+		End With
+		' mnuViewWhitespace
+		With mnuViewWhitespace
+			.Name = "mnuViewWhitespace"
+			.Designer = @This
+			.Caption = "Whitespace"
+			.OnClick = @_mnuView_Click
+			.Parent = @mnuView
+		End With
+		' mnuViewEOL
+		With mnuViewEOL
+			.Name = "mnuViewEOL"
+			.Designer = @This
+			.Caption = "End of Line"
+			.OnClick = @_mnuView_Click
+			.Parent = @mnuView
+		End With
+		' mnuViewLN
+		With mnuViewLN
+			.Name = "mnuViewLN"
+			.Designer = @This
+			.Caption = "Line Numbers"
+			.OnClick = @_mnuView_Click
+			.Parent = @mnuView
+		End With
+		' mnuViewCaretLine
+		With mnuViewCaretLine
+			.Name = "mnuViewCaretLine"
+			.Designer = @This
+			.Caption = "Caret Line"
+			.OnClick = @_mnuView_Click
+			.Parent = @mnuView
+		End With
+		' mnuViewFold
+		With mnuViewFold
+			.Name = "mnuViewFold"
+			.Designer = @This
+			.Caption = "Fold"
+			.OnClick = @_mnuView_Click
+			.Checked = True
+			.Parent = @mnuView
+		End With
+		' mnuWindow
 		With mnuWindow
 			.Name = "mnuWindow"
 			.Caption = "&Window"
@@ -356,6 +412,7 @@
 			.Enabled = False
 			.Parent = @MainMenu1
 		End With
+		' mnuWindowTileHorizontal
 		With mnuWindowTileHorizontal
 			.Name = "mnuWindowTileHorizontal"
 			.Caption = "Tile &Horizontal"
@@ -363,6 +420,7 @@
 			.OnClick = @_mnuWindow_Click
 			.Parent = @mnuWindow
 		End With
+		' mnuWindowTileVertical
 		With mnuWindowTileVertical
 			.Name = "mnuWindowTileVertical"
 			.Caption = "Tile &Vertical"
@@ -370,6 +428,7 @@
 			.OnClick = @_mnuWindow_Click
 			.Parent = @mnuWindow
 		End With
+		' mnuWindowCascade
 		With mnuWindowCascade
 			.Name = "mnuWindowCascade"
 			.Caption = "&Cascade"
@@ -377,6 +436,7 @@
 			.OnClick = @_mnuWindow_Click
 			.Parent = @mnuWindow
 		End With
+		' mnuWindowArrangeIcons
 		With mnuWindowArrangeIcons
 			.Name= "mnuWindowArrangeIcons"
 			.Caption = "&Arrange Icons"
@@ -384,9 +444,9 @@
 			.OnClick = @_mnuWindow_Click
 			.Parent = @mnuWindow
 		End With
-		' MenuItem3
-		With MenuItem3
-			.Name = "MenuItem3"
+		' mnuWindowBar1
+		With mnuWindowBar1
+			.Name = "mnuWindowBar1"
 			.Designer = @This
 			.Caption = "-"
 			.Parent = @mnuWindow
@@ -524,13 +584,31 @@ Private Sub MDIMainType.mnuFile_Click(ByRef Sender As MenuItem)
 End Sub
 
 Private Sub MDIMainType.mnuEdit_Click(ByRef Sender As MenuItem)
+	If actMidChildIdx < 0 Then Exit Sub
+	Dim a As MDIChildType Ptr = lstMdiChild.Item(actMidChildIdx)
 	Select Case Sender.Name
+	Case "mnuEditRedo"
+		SendMessage(a->hSci, SCI_REDO, 0, 0)
+	Case "mnuEditUndo"
+		SendMessage(a->hSci, SCI_UNDO, 0, 0)
+	Case "mnuEditCut"
+		SendMessage(a->hSci, SCI_CUT, 0, 0)
+	Case "mnuEditCopy"
+		SendMessage(a->hSci, SCI_COPY, 0, 0)
+	Case "mnuEditPaste"
+		SendMessage(a->hSci, SCI_PASTE, 0, 0)
+	Case "mnuEditDelete"
+		SendMessage(a->hSci, SCI_CLEAR, 0, 0)
+	Case "mnuEditSelectAll"
+		SendMessage(a->hSci, SCI_SELECTALL, 0, 0)
 	Case Else
 		MsgBox Sender.Name & !"\r\nThis function is under construction", "Edit"
 	End Select
 End Sub
 
 Private Sub MDIMainType.mnuView_Click(ByRef Sender As MenuItem)
+	If actMidChildIdx < 0 Then Exit Sub
+	Dim a As MDIChildType Ptr = lstMdiChild.Item(actMidChildIdx)
 	Select Case Sender.Name
 	Case "mnuViewToolbar"
 		If Sender.Checked Then
@@ -553,6 +631,44 @@ Private Sub MDIMainType.mnuView_Click(ByRef Sender As MenuItem)
 			Sender.Checked = True
 		End If
 		SetDarkMode(Sender.Checked, Sender.Checked)
+	Case "mnuViewWhitespace"
+		If Sender.Checked Then
+			Sender.Checked = False
+		Else
+			Sender.Checked = True
+		End If
+		If Sender.Checked Then SendMessage(a->hSci, SCI_SETVIEWWS, SCWS_VISIBLEALWAYS, 0) Else SendMessage(a->hSci, SCI_SETVIEWWS, SCWS_INVISIBLE, 0)
+	Case "mnuViewEOL"
+		If Sender.Checked Then
+			Sender.Checked = False
+		Else
+			Sender.Checked = True
+		End If
+		SendMessage(a->hSci, SCI_SETVIEWEOL, Sender.Checked, 0)
+	Case "mnuViewLN"
+		If Sender.Checked Then
+			Sender.Checked = False
+		Else
+			Sender.Checked = True
+		End If
+	    SendMessage(a->hSci, SCI_SETMARGINWIDTHN, 0, IIf(Sender.Checked, 35, 0))
+	Case "mnuViewCaretLine"
+		If Sender.Checked Then
+			Sender.Checked = False
+		Else
+			Sender.Checked = True
+		End If
+		SendMessage(a->hSci, SCI_SETCARETLINEVISIBLEALWAYS, Sender.Checked, 0)
+		SendMessage(a->hSci, SCI_SETCARETLINEVISIBLE, Sender.Checked, 0)
+	Case "mnuViewFold"
+		If Sender.Checked Then
+			Sender.Checked = False
+		Else
+			Sender.Checked = True
+		End If
+	    SendMessage(a->hSci, SCI_SETMARGINTYPEN, 1, SC_MARGIN_SYMBOL)
+	    SendMessage(a->hSci, SCI_SETMARGINMASKN, 1, SC_MASK_FOLDERS)
+	    SendMessage(a->hSci, SCI_SETMARGINWIDTHN, 1, IIf(Sender.Checked, 20, 0))
 	Case Else
 		MsgBox Sender.Name & !"\r\nThis function is under construction", "View"
 	End Select
@@ -595,7 +711,7 @@ End Sub
 Private Sub MDIMainType.mnuHelp_Click(ByRef Sender As MenuItem)
 	Select Case Sender.Name
 	Case "mnuHelpAbout"
-		MsgBox(!"Visual FB Editor MDI Demo\r\nBy Cm Wang", "MDI Demo")
+		MsgBox(!"Visual FB Editor\r\n\r\nMDI Scintilla Example\r\nBy Cm Wang", "MDI Scintilla Example")
 	Case Else
 		MsgBox Sender.Name & !"\r\nThis function is under construction", "Edit"
 	End Select
@@ -648,6 +764,7 @@ Private Sub MDIMainType.MDIChildMenuUpdate()
 	i = 0
 	mnuWindows(i) = New MenuItem
 	mnuWindows(i)->Caption = "-"
+	mnuWindows(i)->Name = "mnuWindowBar2"
 	mnuWindow.Add mnuWindows(i)
 	
 	'create child list menu

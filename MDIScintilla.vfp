@@ -1,4 +1,6 @@
-﻿File=MDIChild.frm
+﻿File=SciLexer.bi
+File=Scintilla.bi
+File=MDIChild.frm
 File=MDIList.frm
 *File=MDIMain.frm
 File=Form1.rc
@@ -11,7 +13,7 @@ PassAllModuleFilesToCompiler=false
 MajorVersion=0
 MinorVersion=0
 RevisionVersion=0
-BuildVersion=345
+BuildVersion=406
 AutoIncrementVersion=false
 ApplicationTitle="MDIScintilla"
 ApplicationIcon=""

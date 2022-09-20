@@ -78,7 +78,6 @@ Private Sub MDIChildType.Form_Create(ByRef Sender As Control)
 	Dim As Integer i, rx, ry, rw, rh, ext, sci_style, sciID
 	rx = 180: ry = 84 : rw = 598 : rh = 390 : ext = &h200 : sciID = 400
 	hSci = CreateWindowEx(ext, "Scintilla", "", WS_CHILD Or WS_VISIBLE Or WS_TABSTOP Or WS_CLIPCHILDREN, rx, ry, rw, rh, Handle, NULL, 0, 0)
-	SendMessage(hSci, SCI_SETLEXER, 75, 0)
 	SendMessage(hSci, SCI_STYLECLEARALL, 0, 1)
 
 	Form_Resize(Sender, 0, 0)
