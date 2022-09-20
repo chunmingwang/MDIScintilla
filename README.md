@@ -1,4 +1,7 @@
 # MDIScintilla
 Example for VisualFBEditor
 
-![image](https://user-images.githubusercontent.com/35757455/189828150-ad1ac6ec-8915-42a5-bf64-d39bbccf598f.png)
+![image](https://user-images.githubusercontent.com/35757455/191184027-1fdafc21-e37d-4302-9a87-d9d212d5b1ab.png)
+
+![image](https://user-images.githubusercontent.com/35757455/191183970-69728e24-38a9-46bd-aa53-8d8cc2b606f5.png)
+
