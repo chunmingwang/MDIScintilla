@@ -1,7 +1,7 @@
 # MDIScintilla
 Example for VisualFBEditor
 
-MDIScintilla like text editor based on the Scintilla source code.
+MDIScintilla like text editor based on the Scintilla project.
 
 ![image](https://user-images.githubusercontent.com/35757455/191184027-1fdafc21-e37d-4302-9a87-d9d212d5b1ab.png)
 
