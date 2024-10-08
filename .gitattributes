@@ -1,0 +1,3 @@
+*.bi linguist-language=FreeBASIC
+*.bas linguist-language=FreeBASIC
+*.frm linguist-language=FreeBASIC
